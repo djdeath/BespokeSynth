@@ -1714,14 +1714,14 @@ void ModularSynth::SaveLayoutAsPopup()
 {
    FileChooser chooser("Save current layout as...", File(ofToDataPath("layouts/newlayout.json")));
    if (chooser.browseForFileToSave(true))
-      SaveLayout(chooser.getResult().getRelativePathFrom(File(ofToDataPath(""))).toStdString());
+      SaveLayout(chooser.getResult().getFullPathName().toStdString());
 }
 
 void ModularSynth::SaveStatePopup()
 {
    FileChooser chooser("Save current state as...", File(ofToDataPath(ofGetTimestampString("savestate/%Y-%m-%d_%H-%M.bsk"))));
    if (chooser.browseForFileToSave(true))
-      SaveState(chooser.getResult().getRelativePathFrom(File(ofToDataPath(""))).toStdString());
+      SaveState(chooser.getResult().getFullPathName().toStdString());
 }
 
 void ModularSynth::LoadStatePopup()
@@ -1733,7 +1733,7 @@ void ModularSynth::LoadStatePopupImp()
 {
    FileChooser chooser("Load state", File(ofToDataPath("savestate")), "*.bsk");
    if (chooser.browseForFileToOpen())
-      LoadState(chooser.getResult().getRelativePathFrom(File(ofToDataPath(""))).toStdString());
+      LoadState(chooser.getResult().getFullPathName().toStdString());
 }
 
 void ModularSynth::SaveState(string file)
