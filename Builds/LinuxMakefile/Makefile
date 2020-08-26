@@ -15,6 +15,10 @@ ifndef STRIP
   STRIP=strip
 endif
 
+ifndef PKG_CONFIG
+  PKG_CONFIG=pkg-config
+endif
+
 ifndef AR
   AR=ar
 endif
@@ -35,13 +39,13 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := 
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DGLEW_STATIC -DGL_GLEXT_PROTOTYPES -DBESPOKE_LINUX -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.0 -DJUCE_APP_VERSION_HEX=0x10000 $(shell pkg-config --cflags alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl) -pthread -I$(HOME)/JUCE/modules/juce_audio_processors/format_types/VST3_SDK -I../../JuceLibraryCode -I$(HOME)/JUCE/modules -I../../Source/json/include -I../../Source/glew/include -I../../Source/push2/ -I../../Source/push2/libusb -I../../Source/push2/modules/libusb $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DGLEW_STATIC -DGL_GLEXT_PROTOTYPES -DBESPOKE_LINUX -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.0 -DJUCE_APP_VERSION_HEX=0x10000 $(shell $(PKG_CONFIG) --cflags alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg jack) -pthread -I/usr/share/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../JuceLibraryCode -I/usr/share/juce/modules -I../../Source/json/include -I../../Source/glew/include -I../../Source/push2/ -I../../Source/push2/libusb -I../../Source/push2/modules/libusb $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0 -DJucePlugin_Build_Unity=0
   JUCE_TARGET_APP := BespokeSynth
 
-  JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0 `python-config --cflags` $(CFLAGS)
+  JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0 -Wall -Wextra -Wstrict-aliasing -Wuninitialized -Wunused-parameter -Wsign-compare -Woverloaded-virtual -Wreorder -Wsign-conversion -Wunreachable-code -Wzero-as-null-pointer-constant -Wcast-align -Wno-implicit-fallthrough -Wno-maybe-uninitialized -Wno-missing-field-initializers -Wno-ignored-qualifiers `python3-config --cflags` -fPIE -fno-omit-frame-pointer -fsanitize=address -static-libasan $(CFLAGS)
   JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=c++11 $(CXXFLAGS)
-  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/lib/x86_64-linux-gnu/ $(shell pkg-config --libs alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl) `python-config --ldflags` -lrt -ldl -lpthread -lGL -lusb-1.0 $(LDFLAGS)
+  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/lib/x86_64-linux-gnu/ $(shell $(PKG_CONFIG) --libs alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg jack) `python3-config --ldflags --embed` -fsanitize=address -static-libasan -lrt -ldl -lpthread -lGL -lusb-1.0 $(LDFLAGS)
 
   CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 endif
@@ -56,18 +60,19 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := 
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DGLEW_STATIC -DGL_GLEXT_PROTOTYPES -DBESPOKE_LINUX -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.0 -DJUCE_APP_VERSION_HEX=0x10000 $(shell pkg-config --cflags alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl) -pthread -I$(HOME)/JUCE/modules/juce_audio_processors/format_types/VST3_SDK -I../../JuceLibraryCode -I$(HOME)/JUCE/modules -I../../Source/json/include -I../../Source/glew/include -I../../Source/push2/ -I../../Source/push2/libusb -I../../Source/push2/modules/libusb $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DGLEW_STATIC -DGL_GLEXT_PROTOTYPES -DBESPOKE_LINUX -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.0 -DJUCE_APP_VERSION_HEX=0x10000 $(shell $(PKG_CONFIG) --cflags alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg jack) -pthread -I/usr/share/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../JuceLibraryCode -I/usr/share/juce/modules -I../../Source/json/include -I../../Source/glew/include -I../../Source/push2/ -I../../Source/push2/libusb -I../../Source/push2/modules/libusb $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0 -DJucePlugin_Build_Unity=0
   JUCE_TARGET_APP := BespokeSynth
 
-  JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -O3 `python-config --cflags` $(CFLAGS)
+  JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -O3 -Wall -Wextra -Wstrict-aliasing -Wuninitialized -Wunused-parameter -Wsign-compare -Woverloaded-virtual -Wreorder -Wsign-conversion -Wunreachable-code -Wzero-as-null-pointer-constant -Wcast-align -Wno-implicit-fallthrough -Wno-maybe-uninitialized -Wno-missing-field-initializers -Wno-ignored-qualifiers `python3-config --cflags` -fPIE -fno-omit-frame-pointer -fsanitize=address -static-libasan $(CFLAGS)
   JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=c++11 $(CXXFLAGS)
-  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/lib/x86_64-linux-gnu/ $(shell pkg-config --libs alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl) -fvisibility=hidden `python-config --ldflags` -lrt -ldl -lpthread -lGL -lusb-1.0 $(LDFLAGS)
+  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/lib/x86_64-linux-gnu/ $(shell $(PKG_CONFIG) --libs alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg jack) -fvisibility=hidden `python3-config --ldflags --embed` -fsanitize=address -static-libasan -lrt -ldl -lpthread -lGL -lusb-1.0 $(LDFLAGS)
 
   CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 endif
 
 OBJECTS_APP := \
+  $(JUCE_OBJDIR)/PerlinNoise_bc586287.o \
   $(JUCE_OBJDIR)/JuceToPush2DisplayBridge_9a62e852.o \
   $(JUCE_OBJDIR)/libusb_platform_wrapper_64dffcb7.o \
   $(JUCE_OBJDIR)/Push2-Usb-Communicator_2ebfaa0a.o \
@@ -101,6 +106,8 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/Pumper_df274e1e.o \
   $(JUCE_OBJDIR)/Stutter_18c3b742.o \
   $(JUCE_OBJDIR)/TremoloEffect_db6065e.o \
+  $(JUCE_OBJDIR)/FubbleModule_85c58a1d.o \
+  $(JUCE_OBJDIR)/GridModule_614aaddb.o \
   $(JUCE_OBJDIR)/PulseButton_62ee50c.o \
   $(JUCE_OBJDIR)/NoteStreamDisplay_120eebb1.o \
   $(JUCE_OBJDIR)/ModulatorGravity_4f7b8c68.o \
@@ -391,13 +398,18 @@ OBJECTS_APP := \
 all : $(JUCE_OUTDIR)/$(JUCE_TARGET_APP)
 
 $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : $(OBJECTS_APP) $(RESOURCES)
-	@command -v pkg-config >/dev/null 2>&1 || { echo >&2 "pkg-config not installed. Please, install it."; exit 1; }
-	@pkg-config --print-errors alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl
+	@command -v $(PKG_CONFIG) >/dev/null 2>&1 || { echo >&2 "pkg-config not installed. Please, install it."; exit 1; }
+	@$(PKG_CONFIG) --print-errors alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg jack
 	@echo Linking "BespokeSynth - App"
 	-$(V_AT)mkdir -p $(JUCE_BINDIR)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
 	-$(V_AT)mkdir -p $(JUCE_OUTDIR)
 	$(V_AT)$(CXX) -o $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) $(OBJECTS_APP) $(JUCE_LDFLAGS) $(JUCE_LDFLAGS_APP) $(RESOURCES) $(TARGET_ARCH)
+
+$(JUCE_OBJDIR)/PerlinNoise_bc586287.o: ../../Source/PerlinNoise.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling PerlinNoise.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/JuceToPush2DisplayBridge_9a62e852.o: ../../Source/push2/push2/JuceToPush2DisplayBridge.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
@@ -562,6 +574,16 @@ $(JUCE_OBJDIR)/Stutter_18c3b742.o: ../../Source/Stutter.cpp
 $(JUCE_OBJDIR)/TremoloEffect_db6065e.o: ../../Source/TremoloEffect.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling TremoloEffect.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/FubbleModule_85c58a1d.o: ../../Source/FubbleModule.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling FubbleModule.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/GridModule_614aaddb.o: ../../Source/GridModule.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling GridModule.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PulseButton_62ee50c.o: ../../Source/PulseButton.cpp
