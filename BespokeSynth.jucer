@@ -1105,8 +1105,9 @@
     <MODULE id="juce_osc" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_video" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
   </MODULES>
-  <JUCEOPTIONS JUCE_PLUGINHOST_VST3="1" JUCE_PLUGINHOST_VST="0" JUCE_WEB_BROWSER="1"
-               JUCE_USE_MP3AUDIOFORMAT="1" JUCE_USE_LAME_AUDIO_FORMAT="1" JUCE_INCLUDE_ZLIB_CODE="1"/>
+  <JUCEOPTIONS JUCE_PLUGINHOST_VST3="1" JUCE_PLUGINHOST_VST="0" JUCE_WEB_BROWSER="0"
+               JUCE_USE_MP3AUDIOFORMAT="1" JUCE_USE_LAME_AUDIO_FORMAT="1" JUCE_INCLUDE_ZLIB_CODE="1"
+               JUCE_JACK="0"/>
   <LIVE_SETTINGS>
     <OSX headerPath="" systemHeaderPath=""/>
     <WINDOWS headerPath="" systemHeaderPath="&#10;"/>

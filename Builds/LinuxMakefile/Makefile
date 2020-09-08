@@ -39,13 +39,13 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := 
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DGLEW_STATIC -DGL_GLEXT_PROTOTYPES -DBESPOKE_LINUX -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.0 -DJUCE_APP_VERSION_HEX=0x10000 $(shell $(PKG_CONFIG) --cflags alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg jack) -pthread -I/usr/share/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../JuceLibraryCode -I/usr/share/juce/modules -I../../Source/json/include -I../../Source/glew/include -I../../Source/push2/ -I../../Source/push2/libusb -I../../Source/push2/modules/libusb -I../../../JUCE/modules -I../../../JUCE/modules/juce_audio_processors/format_types/VST3_SDK/ $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DDEBUG=1 -D_DEBUG=1 -DGLEW_STATIC -DGL_GLEXT_PROTOTYPES -DBESPOKE_LINUX -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.0 -DJUCE_APP_VERSION_HEX=0x10000 $(shell $(PKG_CONFIG) --cflags alsa x11 xinerama xext freetype2 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg) -pthread -I/usr/share/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../JuceLibraryCode -I/usr/share/juce/modules -I../../Source/json/include -I../../Source/glew/include -I../../Source/push2/ -I../../Source/push2/libusb -I../../Source/push2/modules/libusb -I../../../JUCE/modules -I../../../JUCE/modules/juce_audio_processors/format_types/VST3_SDK/ $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0 -DJucePlugin_Build_Unity=0
   JUCE_TARGET_APP := BespokeSynth
 
   JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0 -Wall -Wextra -Wstrict-aliasing -Wuninitialized -Wunused-parameter -Wsign-compare -Woverloaded-virtual -Wreorder -Wsign-conversion -Wunreachable-code -Wzero-as-null-pointer-constant -Wcast-align -Wno-implicit-fallthrough -Wno-maybe-uninitialized -Wno-missing-field-initializers -Wno-ignored-qualifiers `python3-config --cflags` -fPIE -fno-omit-frame-pointer -fsanitize=address -static-libasan $(CFLAGS)
   JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=c++11 $(CXXFLAGS)
-  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/lib/x86_64-linux-gnu/ $(shell $(PKG_CONFIG) --libs alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg jack) `python3-config --ldflags --embed` -fsanitize=address -static-libasan -lrt -ldl -lpthread -lGL -lusb-1.0 $(LDFLAGS)
+  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/lib/x86_64-linux-gnu/ $(shell $(PKG_CONFIG) --libs alsa x11 xinerama xext freetype2 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg) `python3-config --ldflags --embed` -fsanitize=address -static-libasan -lrt -ldl -lpthread -lGL -lusb-1.0 $(LDFLAGS)
 
   CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 endif
@@ -60,13 +60,13 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := 
   endif
 
-  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DGLEW_STATIC -DGL_GLEXT_PROTOTYPES -DBESPOKE_LINUX -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.0 -DJUCE_APP_VERSION_HEX=0x10000 $(shell $(PKG_CONFIG) --cflags alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg jack) -pthread -I/usr/share/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../JuceLibraryCode -I/usr/share/juce/modules -I../../Source/json/include -I../../Source/glew/include -I../../Source/push2/ -I../../Source/push2/libusb -I../../Source/push2/modules/libusb $(CPPFLAGS)
+  JUCE_CPPFLAGS := $(DEPFLAGS) -DLINUX=1 -DNDEBUG=1 -DGLEW_STATIC -DGL_GLEXT_PROTOTYPES -DBESPOKE_LINUX -DJUCER_LINUX_MAKE_6D53C8B4=1 -DJUCE_APP_VERSION=1.0.0 -DJUCE_APP_VERSION_HEX=0x10000 $(shell $(PKG_CONFIG) --cflags alsa x11 xinerama xext freetype2 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg) -pthread -I/usr/share/juce/modules/juce_audio_processors/format_types/VST3_SDK -I../../JuceLibraryCode -I/usr/share/juce/modules -I../../Source/json/include -I../../Source/glew/include -I../../Source/push2/ -I../../Source/push2/libusb -I../../Source/push2/modules/libusb $(CPPFLAGS)
   JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 -DJucePlugin_Build_VST3=0 -DJucePlugin_Build_AU=0 -DJucePlugin_Build_AUv3=0 -DJucePlugin_Build_RTAS=0 -DJucePlugin_Build_AAX=0 -DJucePlugin_Build_Standalone=0 -DJucePlugin_Build_Unity=0
   JUCE_TARGET_APP := BespokeSynth
 
   JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -O3 -Wall -Wextra -Wstrict-aliasing -Wuninitialized -Wunused-parameter -Wsign-compare -Woverloaded-virtual -Wreorder -Wsign-conversion -Wunreachable-code -Wzero-as-null-pointer-constant -Wcast-align -Wno-implicit-fallthrough -Wno-maybe-uninitialized -Wno-missing-field-initializers -Wno-ignored-qualifiers `python3-config --cflags` -fPIE -fno-omit-frame-pointer -fsanitize=address -static-libasan $(CFLAGS)
   JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=c++11 $(CXXFLAGS)
-  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/lib/x86_64-linux-gnu/ $(shell $(PKG_CONFIG) --libs alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg jack) -fvisibility=hidden `python3-config --ldflags --embed` -fsanitize=address -static-libasan -lrt -ldl -lpthread -lGL -lusb-1.0 $(LDFLAGS)
+  JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) -L/usr/lib/x86_64-linux-gnu/ $(shell $(PKG_CONFIG) --libs alsa x11 xinerama xext freetype2 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg) -fvisibility=hidden `python3-config --ldflags --embed` -fsanitize=address -static-libasan -lrt -ldl -lpthread -lGL -lusb-1.0 $(LDFLAGS)
 
   CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 endif
@@ -399,7 +399,7 @@ all : $(JUCE_OUTDIR)/$(JUCE_TARGET_APP)
 
 $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : $(OBJECTS_APP) $(RESOURCES)
 	@command -v $(PKG_CONFIG) >/dev/null 2>&1 || { echo >&2 "pkg-config not installed. Please, install it."; exit 1; }
-	@$(PKG_CONFIG) --print-errors alsa x11 xinerama xext freetype2 webkit2gtk-4.0 gtk+-x11-3.0 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg jack
+	@$(PKG_CONFIG) --print-errors alsa x11 xinerama xext freetype2 libcurl zlib libjpeg libpng flac vorbis vorbisfile vorbisenc ogg
 	@echo Linking "BespokeSynth - App"
 	-$(V_AT)mkdir -p $(JUCE_BINDIR)
 	-$(V_AT)mkdir -p $(JUCE_LIBDIR)
