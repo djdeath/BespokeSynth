@@ -48,6 +48,7 @@ namespace
   NBase::Result SFindPushDisplayDeviceHandle(libusb_device_handle** pHandle)
   {
     using namespace NBase;
+#ifdef BESPOKE_PUSH2
 
     int errorCode;
 
@@ -114,6 +115,9 @@ namespace
     libusb_free_device_list(devices, 1);
 
     return device_handle ? Result::NoError : Result(ErrorMsg);
+#else
+    return NBase::Result("No libusb support");
+#endif
   }
 
   //----------------------------------------------------------------------------
@@ -123,7 +127,9 @@ namespace
 
   void LIBUSB_CALL SOnTransferFinished(libusb_transfer* transfer)
   {
+#ifdef BESPOKE_PUSH2
     static_cast<ableton::UsbCommunicator*>(transfer->user_data)->OnTransferFinished(transfer);
+#endif
   }
 
   //----------------------------------------------------------------------------
@@ -137,6 +143,7 @@ namespace
                       unsigned char* buffer,
                       int bufferSize)
   {
+#ifdef BESPOKE_PUSH2
     // Allocate a transfer structure
     libusb_transfer* transfer = libusb_alloc_transfer(0);
     if (!transfer)
@@ -151,6 +158,9 @@ namespace
                               buffer, bufferSize,
                               SOnTransferFinished, instance, 1000);
     return transfer;
+#else
+    return nullptr;
+#endif
   }
 }
 
@@ -208,6 +218,7 @@ NBase::Result UsbCommunicator::startSending()
 {
   using namespace NBase;
 
+#ifdef BESPOKE_PUSH2
   currentLine_ = 0;
 
   // Allocates a transfer struct for the frame header
@@ -238,6 +249,9 @@ NBase::Result UsbCommunicator::startSending()
   }
 
   return Result::NoError;
+#else
+  return Result("not implemented");
+#endif
 }
 
 
@@ -247,6 +261,7 @@ NBase::Result UsbCommunicator::sendNextSlice(libusb_transfer* transfer)
 {
   using namespace NBase;
 
+#ifdef BESPOKE_PUSH2
   // Start of a new frame, so send header first
   if (currentLine_ == 0)
   {
@@ -284,6 +299,9 @@ NBase::Result UsbCommunicator::sendNextSlice(libusb_transfer* transfer)
   }
 
   return Result::NoError;
+#else
+  return Result("not implemented");
+#endif
 }
 
 
@@ -336,6 +354,7 @@ void UsbCommunicator::onFrameCompleted()
 
 void UsbCommunicator::PollUsbForEvents()
 {
+#ifdef BESPOKE_PUSH2
   static struct timeval timeout_500ms = {0 , 500000};
   int terminate_main_loop = 0;
 
@@ -346,4 +365,5 @@ void UsbCommunicator::PollUsbForEvents()
       assert(0);
     }
   }
+#endif
 }
