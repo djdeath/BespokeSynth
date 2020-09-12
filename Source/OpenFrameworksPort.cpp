@@ -79,28 +79,29 @@ string ofToDataPath(string path, bool makeAbsolute)
       string localDataDir = File::getCurrentWorkingDirectory().getChildFile("data").getFullPathName().toStdString();
       if (juce::File(localDataDir).exists())
       {
-         sDataDir = localDataDir;
+         return localDataDir + "/" + path;
       }
-      else
+      localDataDir = File::getSpecialLocation(File::userApplicationDataDirectory).getChildFile("BespokeSynth/data").getFullPathName().toStdString();
+      if (juce::File(localDataDir).exists())
       {
-         string localDataDir = File::getSpecialLocation(File::userApplicationDataDirectory).getChildFile("BespokeSynth/data").getFullPathName().toStdString();
-         if (juce::File(localDataDir).exists())
-         {
-            sDataDir = localDataDir;
-         }
-         else
-         {
-            sDataDir = File::getSpecialLocation(File::globalApplicationsDirectory).getChildFile("share/BespokeSynth/data").getFullPathName().toStdString();
-            if (juce::File(localDataDir).exists())
-            {
-               sDataDir = localDataDir;
-            }
-            else
-            {
-               sDataDir = File::getCurrentWorkingDirectory().getChildFile("../../MacOSX/build/Release/data").getFullPathName().toStdString();
-            }
-         }
+         return localDataDir + "/" + path;
       }
+
+      localDataDir = File::getSpecialLocation(File::globalApplicationsDirectory).getChildFile("share/BespokeSynth/data").getFullPathName().toStdString();
+      if (juce::File(localDataDir).exists())
+      {
+         return localDataDir + "/" + path;
+      }
+
+      // Flatpak location
+      localDataDir = "/app/data";
+      if (juce::File(localDataDir).exists())
+      {
+         return localDataDir + "/" + path;
+      }
+
+      localDataDir = File::getCurrentWorkingDirectory().getChildFile("../../MacOSX/build/Release/data").getFullPathName().toStdString();
+      return localDataDir + "/" + path;
    }
 
 
